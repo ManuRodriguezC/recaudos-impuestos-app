@@ -1,0 +1,15 @@
+---
+import Layout from "../layouts/Layout.astro"
+import Operations from "../operaciones/operaciones"
+import Left from "../icons/Left.astro"
+---
+
+<Layout title="Recaudos Registrados">
+    <main class="flex min-h-screen flex-col items-center justify-center gap-1 bg-[#202d54]">
+        <h1 class="text-5xl text-white font-serif font-medium m-6 border-b-2 border-white pb-2 rounded-md">Listado de Recaudos de Impuestos</h1>
+        <Operations client:only />
+        <a href="/" class="absolute text-3xl text-white rounded-md transition duration-300 hover:scale-110 px-3 py-1 left-10 bottom-10">
+            <Left />
+        </a>
+    </main>
+</Layout>

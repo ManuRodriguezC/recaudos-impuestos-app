@@ -1,1 +1,1 @@
-# recaudos-impuestos-app
+# App recaudos

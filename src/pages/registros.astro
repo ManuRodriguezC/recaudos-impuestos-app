@@ -1,0 +1,15 @@
+---
+import Left from "../icons/Left.astro"
+import Layout from "../layouts/Layout.astro"
+import Home from '../registros/registros'
+---
+
+<Layout title="Registro de Recaudos">
+    <main class="relative flex min-h-screen flex-col items-center justify-center gap-2 bg-[#202d54]">
+        <h1 class="text-5xl font-medium m-6 text-white border-b-2 border-white rounded-lg pb-4">Recaudos Impuestos</h1>
+        <Home client:load/>
+        <a href="/" class="absolute text-3xl text-white rounded-md transition duration-300 hover:scale-110 px-3 py-1 left-10 bottom-10">
+            <Left />
+        </a>
+    </main>
+</Layout>
