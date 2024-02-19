@@ -136,9 +136,22 @@ export default function Operations() {
         
         doc.setFontSize(10)
         autoTable(doc, {
-            head: [['ENTIDAD RECAUDADORA']],
             body: [
-              ['NOMBRE                      FINANCIERA JURISCCOP                        CODIGO                              57']
+                ['ENTIDAD RECAUDADORA']
+            ],
+            styles: {
+                halign: "center",
+                valign: "middle"
+            },
+            columnStyles: {
+                0: {minCellHeight: 10}
+            },
+            startY: 60,
+            theme: "grid"
+        })
+        autoTable(doc, {
+            body: [
+              ['NOMBRE', 'FINANCIERA JURISCOOP', 'CODIGO', '37']
             ],
             styles: {
               fontSize:  10,
@@ -146,30 +159,28 @@ export default function Operations() {
               overflow: 'linebreak',
               tableWidth: 'auto',
             },
-            headStyles: {
-                halign: 'center',
-                valign: 'middle'
-            },
-            startY: 60,
+            columnStyles: {
+                0: { cellWidth: 35 },
+                1: { cellWidth: 60 },
+                2: { cellWidth: 35 },
+
+              },
+            startY: 70,
             theme: "grid",
         })
 
         autoTable(doc, {
-            head: [['OFICINA, AGENCIA O SUCURSAL']],
             body: [
-              ['NOMBRE                                   TUNJA                                           CODIGO                              37']
+              ['OFICINA, AGENCIA O SUCURSAL']
             ],
             styles: {
-              fontSize:  10,
-              cellPadding:  1,
-              overflow: 'linebreak',
-              tableWidth: 'auto',
+                halign: "center",
+                valign: "middle"
             },
-            headStyles: {
-                halign: 'center',
-                valign: 'middle'
+            columnStyles: {
+                0: {minCellHeight: 10}
             },
-            startY: 72,
+            startY: 76,
             theme: "grid",
         })
 
@@ -205,23 +216,23 @@ export default function Operations() {
             theme: "grid"
         })
 
-        const tableWidth = doc.internal.pageSize.getWidth() /  2;
-
         autoTable(doc, {
-            head: [['NUMERO DE FORMULARIOS', '9']],
+            body: [
+              ['NUMERO DE FORMULARIOS', '5'],
+            ],
             styles: {
-              fontSize:  10,
-              cellPadding:  1,
+              fontSize:   10,
+              cellPadding:   1,
               overflow: 'linebreak',
-              tableWidth: 100,
+              tableWidth: 'auto', // Ajusta el ancho de la tabla al contenido
             },
             columnStyles: {
-                0: { halign: 'center' },
-                // Puedes agregar estilos para otras columnas si es necesario
-              },
-            startY: 102,
+              0: { cellWidth: 45, minCellHeight: 10 },
+              1: { cellWidth: 25, minCellHeight: 10 },
+            },
+            startY: 102.3,
             theme: "grid"
-        })
+          });
 
         doc.save('mi_archivo.pdf');
     }
