@@ -6,18 +6,14 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
     <meta name="generator" content="Astro v4.3.5" />
-    <title>Registro de Recaudos</title>
-    <link rel="stylesheet" href="../_astro/index.BpTT75eT.css" />
+    <title>Recaudos Registrados</title>
+    <link rel="stylesheet" href="../_astro/index.Bxc33EA6.css" />
   </head>
   <body>
     <main
-      class="relative flex min-h-screen flex-col items-center justify-center gap-2 bg-[#202d54]"
+      class="flex min-h-screen flex-col items-center justify-center gap-1 bg-[#D2DEF2]"
     >
-      <h1
-        class="text-5xl font-medium m-6 text-white border-b-2 border-white rounded-lg pb-4"
-      >
-        Recaudos Impuestos
-      </h1>
+      <h1 class="text-5xl font-medium m-6">Listado de Recaudos de Impuestos</h1>
       <style>
         astro-island,
         astro-slot,
@@ -32,8 +28,8 @@
               await t()
             )();
           };
-          (self.Astro || (self.Astro = {})).load = e;
-          window.dispatchEvent(new Event("astro:load"));
+          (self.Astro || (self.Astro = {})).only = e;
+          window.dispatchEvent(new Event("astro:only"));
         })();
         (() => {
           var b = Object.defineProperty;
@@ -228,112 +224,21 @@
         })();
       </script>
       <astro-island
-        uid="Z1KPLBh"
-        prefix="r0"
-        component-url="../_astro/registros.BBifRUaK.js"
+        uid="Wm0ca"
+        component-url="../_astro/operaciones.BHK8NADs.js"
         component-export="default"
         renderer-url="../_astro/client.D9Vng9vH.js"
         props="{}"
         ssr=""
-        client="load"
-        opts='{"name":"Home","value":true}'
-        await-children=""
-        ><div
-          class="flex flex-col justify-center items-center bg-white py-5 px-10 rounded-2xl"
+        client="only"
+        opts='{"name":"Operations","value":true}'
+      ></astro-island>
+      <a href="/recaudosApp">
+        <h3
+          class="text-white text-2xl rounded-md hover:bg-[#2d2e83] transition duration-300 hover:scale-105 bg-[#007eb8] px-3 py-1 mt-5 mb-10"
         >
-          <div
-            class="flex flex-col h-[250px] cursor-pointer justify-center mb-5 items-center border-2 rounded-lg border-gray-500 border-solid hover:scale-105 transition-all duration-300"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              version="1.1"
-              id="_x32_"
-              width="350"
-              viewBox="10 10 512 512"
-            >
-              <g>
-                <rect
-                  y="94.103"
-                  class="st0"
-                  width="48.569"
-                  height="323.795"
-                ></rect>
-                <rect
-                  x="72.854"
-                  y="94.103"
-                  class="st0"
-                  width="24.284"
-                  height="323.795"
-                ></rect>
-                <polygon
-                  class="st0"
-                  points="121.423,94.103 121.423,417.897 145.708,417.897 169.992,417.897 169.992,94.103 145.708,94.103  "
-                ></polygon>
-                <polygon
-                  class="st0"
-                  points="194.277,94.103 194.277,417.897 218.561,417.897 242.846,417.897 242.846,94.103 218.561,94.103  "
-                ></polygon>
-                <rect
-                  x="267.13"
-                  y="94.103"
-                  class="st0"
-                  width="24.285"
-                  height="323.795"
-                ></rect>
-                <polygon
-                  class="st0"
-                  points="339.984,94.103 315.7,94.103 315.7,417.897 339.984,417.897 364.269,417.897 388.554,417.897    388.554,94.103 364.269,94.103  "
-                ></polygon>
-                <polygon
-                  class="st0"
-                  points="412.838,94.103 412.838,417.897 437.122,417.897 462.083,417.897 462.083,94.103 437.122,94.103  "
-                ></polygon>
-                <rect
-                  x="487.044"
-                  y="94.103"
-                  class="st0"
-                  width="24.956"
-                  height="323.795"
-                ></rect>
-              </g>
-            </svg>
-            <h1 class="text-center pb-5">Escanear codigo</h1>
-          </div>
-          <div class="flex flex-col items-center justify-center">
-            <h3><strong>Codigo:</strong></h3>
-            <h3><strong>Fecha:</strong></h3>
-            <h3><strong>Monto:</strong></h3>
-            <h3><strong>N. Factura:</strong></h3>
-            <h3><strong>Convenio:</strong></h3>
-          </div>
-          <button
-            class="cursor-pointer text-2xl mt-4 px-4 py-2 rounded-md bg-[#007eb8] text-white border-2 hover:bg-[#2d2e83] transition duration-300 hover:scale-105 hidden"
-          >
-            Enviar
-          </button>
-        </div>
-        <!--astro:end--></astro-island
-      >
-      <a
-        href="/recaudosApp"
-        class="absolute text-3xl text-white rounded-md transition duration-300 hover:scale-110 px-3 py-1 left-10 bottom-10"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="80px"
-          height="80px"
-          viewBox="0 0 24 24"
-          fill="none"
-        >
-          <path
-            stroke="white"
-            d="M5 12H19M5 12L11 6M5 12L11 18"
-            stroke="#000000"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </svg>
+          Volver
+        </h3>
       </a>
     </main>
   </body>

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react"
-import type { RegistersDates } from "../api/registersRecaudos";
 import { deleteRegister, getAllRegister } from "../api/registersRecaudos";
-import Add from "../icons/Add"
+import type { RegistersDates } from "../api/registersRecaudos";
+import React, { useEffect, useState } from "react"
 import AddRegister from "./addOperation";
+import Add from "../icons/Add"
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface SumValuesState {
     [key: string]: number;
@@ -120,8 +122,109 @@ export default function Operations() {
         setTimeout(() => {
             URL.revokeObjectURL(url);
           },  0);
+    }
+
+    function downloadPDF() {
+        const doc = new jsPDF();
+
+        doc.addImage("tunja.png", "JPEG", 10, 10, 25, 25)
+
+        doc.setFontSize(18)
+        doc.text("PLANILLA GENERAL DE", 68, 30)
+        doc.text("CONTROL RECAUDO DIARIO", 60, 37)
+        doc.text("DE IMPUESTOS MUNICIPALES", 58, 44)
         
-    } 
+        doc.setFontSize(10)
+        autoTable(doc, {
+            head: [['ENTIDAD RECAUDADORA']],
+            body: [
+              ['NOMBRE                      FINANCIERA JURISCCOP                        CODIGO                              57']
+            ],
+            styles: {
+              fontSize:  10,
+              cellPadding:  1,
+              overflow: 'linebreak',
+              tableWidth: 'auto',
+            },
+            headStyles: {
+                halign: 'center',
+                valign: 'middle'
+            },
+            startY: 60,
+            theme: "grid",
+        })
+
+        autoTable(doc, {
+            head: [['OFICINA, AGENCIA O SUCURSAL']],
+            body: [
+              ['NOMBRE                                   TUNJA                                           CODIGO                              37']
+            ],
+            styles: {
+              fontSize:  10,
+              cellPadding:  1,
+              overflow: 'linebreak',
+              tableWidth: 'auto',
+            },
+            headStyles: {
+                halign: 'center',
+                valign: 'middle'
+            },
+            startY: 72,
+            theme: "grid",
+        })
+
+        autoTable(doc, {
+            head: [['CORREO ELECTRONICO: tunja@juriscoop.com.co']],
+            body: [
+              ['NUMERO DE CUENTA BANCARIA                                               37003000689']
+            ],
+            styles: {
+              fontSize:  10,
+              cellPadding:  1,
+              overflow: 'linebreak',
+              tableWidth: 'auto',
+            },
+            startY: 84,
+            theme: "grid"
+        })
+
+        autoTable(doc, {
+            head: [['DD/MM/AAAA']],
+
+            headStyles: {
+                halign: "right",
+                valign: "middle"
+            },
+            styles: {
+              fontSize:  10,
+              cellPadding:  1,
+              overflow: 'linebreak',
+              tableWidth: 'auto',
+            },
+            startY: 96,
+            theme: "grid"
+        })
+
+        const tableWidth = doc.internal.pageSize.getWidth() /  2;
+
+        autoTable(doc, {
+            head: [['NUMERO DE FORMULARIOS', '9']],
+            styles: {
+              fontSize:  10,
+              cellPadding:  1,
+              overflow: 'linebreak',
+              tableWidth: 100,
+            },
+            columnStyles: {
+                0: { halign: 'center' },
+                // Puedes agregar estilos para otras columnas si es necesario
+              },
+            startY: 102,
+            theme: "grid"
+        })
+
+        doc.save('mi_archivo.pdf');
+    }
 
     function NewRegis() {
         setNewRegister(true)
@@ -193,11 +296,18 @@ export default function Operations() {
                     </button>
                 }
                 {downloadButton && 
-                    <button
-                        className="px-4 mt-3 py-2 bg-[#007eb8] text-white rounded-lg hover:bg-[#007eb8c1] hover:scale-105 transition-all duration-200"
-                        onClick={() => {downloadFile()}}
-                        >Descargar datos
-                    </button>
+                    <div className="flex flex-row gap-5">
+                        <button
+                            className="px-4 mt-3 py-2 bg-[#007eb8] text-white rounded-lg hover:bg-[#007eb8c1] hover:scale-105 transition-all duration-200"
+                            onClick={() => {downloadFile()}}
+                            >Descargar texto plano
+                        </button>
+                        <button
+                            className="px-4 mt-3 py-2 bg-[#007eb8] text-white rounded-lg hover:bg-[#007eb8c1] hover:scale-105 transition-all duration-200"
+                            onClick={() => {downloadPDF()}}
+                            >Descargar PDF
+                        </button>
+                    </div>
                 }
                 {newRegister &&
                     <AddRegister date={selectedDate} />
