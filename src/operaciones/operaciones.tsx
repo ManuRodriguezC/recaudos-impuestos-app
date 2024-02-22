@@ -5,9 +5,28 @@ import AddRegister from "./addOperation";
 import Add from "../icons/Add"
 import downloadPDF from "./downloadPDF";
 
+
+interface Values {
+    [key: string]: ValueObject;
+}
+
+interface ValueObject {
+    value: number;
+    count: number;
+}
+
+interface values {
+    count: number,
+    value: string,
+    date: string,
+    values: Values
+}
+
 interface SumValuesState {
     [key: string]: number;
-  }
+}
+
+
 
 export default function Operations() {
     const [selectedDate, setSelectedDate] = useState('')
@@ -16,7 +35,8 @@ export default function Operations() {
     const [filterHeaderFile, setFilterHeaderFile] = useState<string[]>([])
     const [filterHeaderLote, setFilterHeaderLote] = useState<string[]>([])
     const [displayDates, setDisplayDates] = useState(false)
-    const [sumValues, setSumValues] = useState<SumValuesState>({})
+    const [sumValueList, setSumValueList] = useState<SumValuesState>({})
+    const [sumValueObj, setSumValueObj] = useState<{ [key: string]: { value: number; count: number; }; }>({});
     const [sumTotal, setSumTotal] = useState(0)
     const [foundRegisters, setFoundRegisters] = useState(false)
     const [downloadButton, setDownloadButton] = useState(false)
@@ -56,6 +76,25 @@ export default function Operations() {
         return result
     }
 
+    function calculateValuesObj(lotes: string[], registers: RegistersDates[]): { [key: string]: { value: number, count: number } } {
+        const result: { [key: string]: { value: number, count: number } } = {};
+        lotes.forEach(lote => {
+            let totalValue =   0;
+            let count =   0;
+            registers.forEach(regis => {
+                if (regis.encabezadoLote == lote) {
+                    totalValue += parseInt(regis.registroDetalle.substring(50,   64));
+                    count++;
+                }
+            });
+            result[lote] = {
+                value: totalValue,
+                count: count
+            };
+        });
+        return result;
+    }
+
     function callRegister() {
         const filter = registers.filter((regis) => regis.fecha == selectedDate)
         if (filter.length > 0) {
@@ -71,9 +110,15 @@ export default function Operations() {
             const headerLote = filter.map((regis) => regis.encabezadoLote)
             const filterLotes = [...new Set(headerLote)]
             setFilterHeaderLote(filterLotes)
-            const values = calculateValues(filterLotes, filter)
-            setSumValues(values)
-            setSumTotal(Object.values(values).reduce((total, value) => total + value, 0))
+
+            const valuesObj = calculateValuesObj(filterLotes, filter)
+            setSumValueObj(valuesObj)
+
+            const valuesList = calculateValues(filterLotes, filter)
+            setSumValueList(valuesList)
+
+            
+            setSumTotal(Object.values(valuesList).reduce((total, value) => total + value, 0))
         } else {
             setFoundRegisters(true)
             setAddregister(true)
@@ -106,7 +151,7 @@ export default function Operations() {
                     dates.push(`${regis.registroDetalle.slice(0, -7)}${count.toString().padStart(7, "0")}${zero.padEnd(68, zero)}`)
                 }
             })
-            dates.push(`08${(count - 1).toString().padStart(9, "0")}${sumValues[lote].toString().padStart(18, "0")}${ind.toString().padStart(4, "0")}${zero.padEnd(129, zero)}`)
+            dates.push(`08${(count - 1).toString().padStart(9, "0")}${sumValueList[lote].toString().padStart(18, "0")}${ind.toString().padStart(4, "0")}${zero.padEnd(129, zero)}`)
         })
         dates.push(`09${filters.length.toString().padStart(9, "0")}${sumTotal.toString().padStart(18, "0")}${zero.padEnd(133, zero)}`)
         const text = dates.join('\n').replaceAll('.', ' ')
@@ -129,6 +174,13 @@ export default function Operations() {
         setDisplayDates(false)
         setFoundRegisters(false)
         setAddregister(false)
+    }
+
+    const pdfDates: values = {
+        count: filters.length,
+        value: `${sumTotal}`,
+        date: selectedDate,
+        values: sumValueObj
     }
 
     return (
@@ -161,7 +213,7 @@ export default function Operations() {
                                 return (
                                     <>
                                     <td>{lote}</td>
-                                    {filters.map((regis, indexx) => {
+                                    {filters.map((regis) => {
                                         if (regis.encabezadoLote === lote) {
                                             count++;
                                             return <td
@@ -177,7 +229,7 @@ export default function Operations() {
                                         }
                                         return null;
                                     })}
-                                    <td className="mb-8">{`08${(count - 1).toString().padStart(9, "0")}${sumValues[lote].toString().padStart(18, "0")}${ind.toString().padStart(4, "0")}`}</td>
+                                    <td className="mb-8">{`08${(count - 1).toString().padStart(9, "0")}${sumValueList[lote].toString().padStart(18, "0")}${ind.toString().padStart(4, "0")}`}</td>
                                     </>
                                 );
                             })}
@@ -197,11 +249,11 @@ export default function Operations() {
                         <button
                             className="px-4 mt-3 py-2 bg-[#007eb8] text-white rounded-lg hover:bg-[#007eb8c1] hover:scale-105 transition-all duration-200"
                             onClick={() => {downloadFile()}}
-                            >Descargar texto plano
+                            >Descargar TXT
                         </button>
                         <button
                             className="px-4 mt-3 py-2 bg-[#007eb8] text-white rounded-lg hover:bg-[#007eb8c1] hover:scale-105 transition-all duration-200"
-                            onClick={() => {downloadPDF()}}
+                            onClick={() => {downloadPDF(pdfDates)}}
                             >Descargar PDF
                         </button>
                     </div>

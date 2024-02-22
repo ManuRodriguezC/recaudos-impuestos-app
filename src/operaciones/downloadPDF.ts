@@ -1,10 +1,44 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-export default function downloadPDF() {
+interface ValueObject {
+    value: number;
+    count: number;
+}
+
+interface values {
+    count: number,
+    value: string,
+    date: string,
+    values: Values
+}
+
+interface Values {
+    [key: string]: ValueObject;
+}
+
+function changeValue(value: string) {
+    const numValue = parseInt(value,  10);
+    const pesosFormat = numValue.toLocaleString('es-CL');
+    return pesosFormat;
+}
+
+export default function downloadPDF({count, value, date, values}: values) {
+    let curDate = new Date(date)
+
+    let impuestosValue = values["0577099980097520001"] ? values["0577099980097520001"]["value"].toString().slice(0, -2) : "0"
+    let impuestosCount = values["0577099980097520001"] ? values["0577099980097520001"]["count"] : "0"
+    let rentaValue = values["0577099984352850001"] ? values["0577099984352850001"]["value"].toString().slice(0, -2) : "0"
+    let rentaCount = values["0577099984352850001"] ? values["0577099984352850001"]["count"] : "0"
+
+
+    let nextDay = new Date(date);
+    nextDay.setDate(curDate.getDate() +  1);
+    let formattedNextDay = nextDay.toISOString().split('T')[0];
+
     const doc = new jsPDF();
 
-    doc.addImage("tunja.png", "JPEG", 10, 10, 25, 25)
+    doc.addImage("/recaudosapp/tunja.png", "PNG", 10, 10, 25, 25)
 
     doc.setFontSize(18)
     doc.text("PLANILLA GENERAL DE", 68, 30)
@@ -30,7 +64,7 @@ export default function downloadPDF() {
 
     autoTable(doc, {
         body: [
-          ['NOMBRE', 'COOVITEL', 'CODIGO', '37']
+          ['NOMBRE', 'COOVITEL', 'CODIGO', '66']
         ],
         styles: {
           fontSize:  10,
@@ -90,7 +124,7 @@ export default function downloadPDF() {
 
     autoTable(doc, {
         body: [
-            ['CORREO ELECTRONICO', 'tunjacoovitel@coovitel.coop']
+            ['CORREO ELECTRONICO', 'calidadyservicio@coovitel.coop']
         ],
         styles: {
             halign: "center",
@@ -99,7 +133,7 @@ export default function downloadPDF() {
             textColor: "#000000"
         },
         columnStyles: {
-            0: {textColor: "#000000"}
+            0: {textColor: "#000000", cellWidth: 89.2}
         },
         startY: 92,
         theme: "grid"
@@ -107,7 +141,7 @@ export default function downloadPDF() {
 
     autoTable(doc, {
         body: [
-            ['NUMERO DE CUENTA BANCARIA', '**************']
+            ['NUMERO DE CUENTA BANCARIA', '0037000003823']
         ],
         columnStyles: {
             0: {minCellHeight: 10, textColor: "#000000", cellWidth: 89.2, valign: "middle"},
@@ -138,8 +172,8 @@ export default function downloadPDF() {
 
     autoTable(doc, {
         body: [
-            ['', '', 'FECHA DE RECAUDO', '15/02/2024'],
-            ['NUMERO DE FORMULARIOS', '12', 'FECHA DE ENTREGA', '16/02/2024']
+            ['', '', 'FECHA DE RECAUDO', `${date}`],
+            ['NUMERO DE FORMULARIOS', `${count}`, 'FECHA DE ENTREGA', `${formattedNextDay}`]
         ],
         styles: {
             lineWidth:  0.6,
@@ -213,10 +247,10 @@ export default function downloadPDF() {
 
     autoTable(doc, {
         body: [
-            ['PREDIAL', '12', '$1.112.112'],
-            ['ICA', '0', '$0'],
-            ['RENTAS VARIAS', '0', '$0'],
-            ['RetelCA', '0', '$0']
+            ['PREDIAL', `${changeValue(String(impuestosCount))}`, `$ ${changeValue(String(impuestosValue))}`],
+            ['ICA', '0', '$ 0'],
+            ['RENTAS VARIAS', `${changeValue(String(rentaCount))}`, `$ ${changeValue(String(rentaValue))}`],
+            ['RetelCA', '0', '$ 0']
         ],
         columnStyles: {
             0: {halign: "center", textColor: "#000000", valign: "middle", cellWidth: 34.2, minCellHeight: 12},
@@ -234,7 +268,7 @@ export default function downloadPDF() {
 
     autoTable(doc, {
         body: [
-            ['Total Docum.', '12', 'Total Recaudado', '$1.112.112']
+            ['Total Docum.', `${count}`, 'Total Recaudado', `$ ${changeValue(value.toString().slice(0, -2))}`]
         ],
         columnStyles: {
             0: {halign: "center", textColor: "#000000", valign: "middle", cellWidth: 34.2, minCellHeight: 12},
@@ -270,7 +304,7 @@ export default function downloadPDF() {
 
     autoTable(doc, {
         body: [
-            ['NOMBRE DE FUNCIONARIO AUTORIZADO', '*************'],
+            ['NOMBRE DE FUNCIONARIO AUTORIZADO', 'IRMA ROCIO CABANZA'],
             ['FIRMA FUNCIONARIO AUTORIZADO', '']
         ],
         columnStyles: {
@@ -288,5 +322,5 @@ export default function downloadPDF() {
     doc.setFontSize(8)
     doc.text("(*)ADJUNTO A ESTA PLANILLA DEBE SER ENTREGADO EL MOVIMIENTO DIARIO DE CUENTA", 40, 260)
 
-    doc.save('mi_archivo.pdf');
+    doc.save(`recaudos ${date}.pdf`);
 }

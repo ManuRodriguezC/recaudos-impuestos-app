@@ -1,5 +1,7 @@
 # build output
 dist/
+recaudosApp/
+recaudosApp_v2/
 
 # generated types
 .astro/
@@ -19,3 +21,5 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+#deploys
