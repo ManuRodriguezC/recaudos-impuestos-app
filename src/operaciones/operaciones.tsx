@@ -3,8 +3,7 @@ import type { RegistersDates } from "../api/registersRecaudos";
 import React, { useEffect, useState } from "react"
 import AddRegister from "./addOperation";
 import Add from "../icons/Add"
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import downloadPDF from "./downloadPDF";
 
 interface SumValuesState {
     [key: string]: number;
@@ -122,119 +121,6 @@ export default function Operations() {
         setTimeout(() => {
             URL.revokeObjectURL(url);
           },  0);
-    }
-
-    function downloadPDF() {
-        const doc = new jsPDF();
-
-        doc.addImage("tunja.png", "JPEG", 10, 10, 25, 25)
-
-        doc.setFontSize(18)
-        doc.text("PLANILLA GENERAL DE", 68, 30)
-        doc.text("CONTROL RECAUDO DIARIO", 60, 37)
-        doc.text("DE IMPUESTOS MUNICIPALES", 58, 44)
-        
-        doc.setFontSize(10)
-        autoTable(doc, {
-            body: [
-                ['ENTIDAD RECAUDADORA']
-            ],
-            styles: {
-                halign: "center",
-                valign: "middle"
-            },
-            columnStyles: {
-                0: {minCellHeight: 10}
-            },
-            startY: 60,
-            theme: "grid"
-        })
-        autoTable(doc, {
-            body: [
-              ['NOMBRE', 'FINANCIERA JURISCOOP', 'CODIGO', '37']
-            ],
-            styles: {
-              fontSize:  10,
-              cellPadding:  1,
-              overflow: 'linebreak',
-              tableWidth: 'auto',
-            },
-            columnStyles: {
-                0: { cellWidth: 35 },
-                1: { cellWidth: 60 },
-                2: { cellWidth: 35 },
-
-              },
-            startY: 70,
-            theme: "grid",
-        })
-
-        autoTable(doc, {
-            body: [
-              ['OFICINA, AGENCIA O SUCURSAL']
-            ],
-            styles: {
-                halign: "center",
-                valign: "middle"
-            },
-            columnStyles: {
-                0: {minCellHeight: 10}
-            },
-            startY: 76,
-            theme: "grid",
-        })
-
-        autoTable(doc, {
-            head: [['CORREO ELECTRONICO: tunja@juriscoop.com.co']],
-            body: [
-              ['NUMERO DE CUENTA BANCARIA                                               37003000689']
-            ],
-            styles: {
-              fontSize:  10,
-              cellPadding:  1,
-              overflow: 'linebreak',
-              tableWidth: 'auto',
-            },
-            startY: 84,
-            theme: "grid"
-        })
-
-        autoTable(doc, {
-            head: [['DD/MM/AAAA']],
-
-            headStyles: {
-                halign: "right",
-                valign: "middle"
-            },
-            styles: {
-              fontSize:  10,
-              cellPadding:  1,
-              overflow: 'linebreak',
-              tableWidth: 'auto',
-            },
-            startY: 96,
-            theme: "grid"
-        })
-
-        autoTable(doc, {
-            body: [
-              ['NUMERO DE FORMULARIOS', '5'],
-            ],
-            styles: {
-              fontSize:   10,
-              cellPadding:   1,
-              overflow: 'linebreak',
-              tableWidth: 'auto', // Ajusta el ancho de la tabla al contenido
-            },
-            columnStyles: {
-              0: { cellWidth: 45, minCellHeight: 10 },
-              1: { cellWidth: 25, minCellHeight: 10 },
-            },
-            startY: 102.3,
-            theme: "grid"
-          });
-
-        doc.save('mi_archivo.pdf');
     }
 
     function NewRegis() {
