@@ -1,7 +1,7 @@
 # build output
 dist/
-recaudosApp/
 recaudosApp_v2/
+recaudosApp/
 
 # generated types
 .astro/

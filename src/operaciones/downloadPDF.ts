@@ -34,8 +34,15 @@ export default function downloadPDF({count, value, date, values}: values) {
 
     let nextDay = new Date(date);
     nextDay.setDate(curDate.getDate() +  1);
-    let formattedNextDay = nextDay.toISOString().split('T')[0];
 
+    if (nextDay.getDay() === 5) {
+        nextDay.setDate(curDate.getDate() + 3)
+    }
+    if (nextDay.getDay() === 6) {
+        nextDay.setDate(curDate.getDate() + 2)
+    }
+
+    let formattedNextDay = nextDay.toISOString().split('T')[0];
     const doc = new jsPDF();
 
     doc.addImage("/recaudosapp/tunja.png", "PNG", 10, 10, 25, 25)
@@ -141,7 +148,7 @@ export default function downloadPDF({count, value, date, values}: values) {
 
     autoTable(doc, {
         body: [
-            ['NUMERO DE CUENTA BANCARIA', '0037000003823']
+            ['NUMERO DE CUENTA BANCARIA', '0037000003823 (Interna****3570)']
         ],
         columnStyles: {
             0: {minCellHeight: 10, textColor: "#000000", cellWidth: 89.2, valign: "middle"},
@@ -304,7 +311,7 @@ export default function downloadPDF({count, value, date, values}: values) {
 
     autoTable(doc, {
         body: [
-            ['NOMBRE DE FUNCIONARIO AUTORIZADO', 'IRMA ROCIO CABANZA'],
+            ['NOMBRE DE FUNCIONARIO AUTORIZADO', 'IRMA ROCIO CABANZO'],
             ['FIRMA FUNCIONARIO AUTORIZADO', '']
         ],
         columnStyles: {
