@@ -28,8 +28,12 @@ export default async function setDatas({ convenio, valuePay, factura, fecha }: D
       const res = await getAllRegister()
       const filterres = res.data.reverse()
       return {success: true, data: filterres[0]["id"]};
-    } catch (error) {
-      console.log(error);
-      return {success: false, data: 'No se creo el registro'};
+    } catch (error: any) {
+      const err = error.response.data.registroDetalle[0]
+      if (err == "Ya existe registers recaudos con este registroDetalle.") {
+        return {success: false, data: 'Ya existe un registro con ese numero de recibo', exist: true}
+      }
+      console.log(error.response.data.registroDetalle);
+      return {success: false, data: 'No se creo el registro', exist: false};
     }
   }

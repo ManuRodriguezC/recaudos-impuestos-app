@@ -24,6 +24,7 @@ function changeValue(value: string) {
 }
 
 export default function downloadPDF({count, value, date, values}: values) {
+    console.log(values)
     let curDate = new Date(date)
 
     let impuestosValue = values["0577099980097520001"] ? values["0577099980097520001"]["value"].toString().slice(0, -2) : "0"
@@ -45,7 +46,8 @@ export default function downloadPDF({count, value, date, values}: values) {
     let formattedNextDay = nextDay.toISOString().split('T')[0];
     const doc = new jsPDF();
 
-    doc.addImage("/recaudosapp/tunja.png", "PNG", 10, 10, 25, 25)
+    doc.addImage("tunja.png", "PNG", 10, 10, 25, 25)
+    // doc.addImage("/recaudosapp/tunja.png", "PNG", 10, 10, 25, 25)
 
     doc.setFontSize(18)
     doc.text("PLANILLA GENERAL DE", 68, 30)

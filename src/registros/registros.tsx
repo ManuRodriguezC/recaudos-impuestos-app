@@ -17,6 +17,7 @@ export default function Home() {
   const [button, setButton] = useState(false)
   const [successRegis, setSuccessRegis] = useState(false)
   const [faildRegis, setFaildRegis] = useState(false)
+  const [faildRegisForExist, setFaildRegisForExist] = useState(false)
   const [scanCode, setScanCode] = useState(false)
   const [numRecaudo, setNumRecaudo] = useState("")
  
@@ -26,13 +27,13 @@ export default function Home() {
       setStyleCode(false);
       setScanCode(false);
       if (code !== "") {
-        setDate(code.substring(52,  60));
+        setDate(code.substring(50,  58));
         const current = currentDate();
-        if (parseInt(code.substring(52,  60)) < parseInt(current)) {
+        if (parseInt(code.substring(50,  58)) < parseInt(current)) {
           setSpan(true);
         } else {
-          setValuePay(code.substring(38,  50));
-          setFactura(code.substring(20,  32));
+          setValuePay(code.substring(38,  48));
+          setFactura(code.substring(20,  34));
           setConvenio(code.substring(3,  16));
           setButton(true);
         }
@@ -40,15 +41,18 @@ export default function Home() {
       return;
     }
     if (event.key !== "Alt" && event.key !== "(" && event.key !== ")") {
-      if ((count ===  32 || count ===  53) && event.key === "0") {
+      if (count === 34) {
+        console.log(event.key)
+      }
+      if ((count ===  34 || count ===  51) && event.key === "0") {
         setCount((prevCount) => prevCount +  1);
         return;
       }
-      if ((count ===  33 || count ===  54) && event.key === "2") {
+      if ((count ===  35 || count ===  52) && event.key === "2") {
         setCount((prevCount) => prevCount +  1);
         return;
       }
-      if ((count ===  34 || count ===  55) && event.key === "9") {
+      if ((count ===  36 || count ===  53) && event.key === "9") {
         setCount((prevCount) => prevCount +  1);
         return;
       } else {
@@ -93,10 +97,14 @@ export default function Home() {
     setButton(false);
     const result = await setDatas({ convenio, valuePay, factura }) as any;
     if (result.success) {
-      setNumRecaudo(result.data)
+      setNumRecaudo(result.data);
       setSuccessRegis(true);
     } else {
-      setFaildRegis(true);
+      if (result.exist) {
+        setFaildRegisForExist(true);
+      } else {
+        setFaildRegis(true);
+      }
     }
   }
   
@@ -113,9 +121,13 @@ export default function Home() {
           {span && <h4 className={`text-5xl text-red-600 mb-5`}>La fecha de pago expiro</h4>}
           {successRegis && <span className="text-2xl border-b-2 border-[#007eb8] text-[#007eb8] font-semibold">Registro de Recaudo Exitoso - # {numRecaudo.toString().padStart(5, "0")}</span>}
           {faildRegis && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Registro de Recaudo Fallido</span>}
+          {faildRegisForExist && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Ya existe un registro con el numero de recibo</span>}
           {scanCode && <span className="text-2xl font-mono font-semibold">Por favor escanee el codigo</span>}
         <div className="flex flex-col items-center justify-center">
-          <h3><strong>Codigo:</strong> {code}</h3>
+          <h3><strong>Codigo:</strong>
+            {code}
+            {/* {`${code.substring(0, 3)}-${code.substring(3, 16)}-${code.substring(16, 20)}-${code.substring(20, 34)}-${code.substring(34, 38)}-${code.substring(38, 48)}--${code.substring(48, 51)}-${code.substring(51, 58)}`} */}
+          </h3>
           <h3><strong>Fecha:</strong> {date}</h3>
           <h3><strong>Monto:</strong> {valuePay}</h3>
           <h3><strong>N. Factura:</strong> {factura}</h3>

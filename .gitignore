@@ -2,6 +2,7 @@
 dist/
 recaudosApp_v2/
 recaudosApp/
+recaudosApp1/
 
 # generated types
 .astro/

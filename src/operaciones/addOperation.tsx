@@ -19,6 +19,7 @@ export default function AddRegister({ date }: datesAddRegis) {
     const [span, setSpan] = useState(false)
     const [button, setButton] = useState(false)
     const [successRegis, setSuccessRegis] = useState(false)
+    const [faildRegisForExist, setFaildRegisForExist] = useState(false)
     const [faildRegis, setFaildRegis] = useState(false)
     const [scanCode, setScanCode] = useState(false)
     const [numRecaudo, setNumRecaudo] = useState("")
@@ -30,11 +31,11 @@ export default function AddRegister({ date }: datesAddRegis) {
         setScanCode(false);
         if (code !== "") {
             const current = currentDate();
-            if (parseInt(code.substring(52,  60)) < parseInt(current)) {
+            if (parseInt(code.substring(50,  58)) < parseInt(current)) {
             setSpan(true);
             } else {
-            setValuePay(code.substring(38,  50));
-            setFactura(code.substring(20,  32));
+            setValuePay(code.substring(38,  48));
+            setFactura(code.substring(20,  34));
             setConvenio(code.substring(3,  16));
             setButton(true);
             }
@@ -42,15 +43,15 @@ export default function AddRegister({ date }: datesAddRegis) {
         return;
         }
         if (event.key !== "Alt" && event.key !== "(" && event.key !== ")") {
-        if ((count ===  32 || count ===  53) && event.key === "0") {
+        if ((count ===  34 || count ===  51) && event.key === "0") {
             setCount((prevCount) => prevCount +  1);
             return;
         }
-        if ((count ===  33 || count ===  54) && event.key === "2") {
+        if ((count ===  35 || count ===  52) && event.key === "2") {
             setCount((prevCount) => prevCount +  1);
             return;
         }
-        if ((count ===  34 || count ===  55) && event.key === "9") {
+        if ((count ===  36 || count ===  53) && event.key === "9") {
             setCount((prevCount) => prevCount +  1);
             return;
         } else {
@@ -94,10 +95,14 @@ export default function AddRegister({ date }: datesAddRegis) {
         setButton(false);
         const result = await setDatas({ convenio, valuePay, factura, fecha }) as any;
         if (result.success) {
-        setNumRecaudo(result.data)
-        setSuccessRegis(true);
+            setNumRecaudo(result.data)
+            setSuccessRegis(true);
         } else {
-        setFaildRegis(true);
+            if (result.exist) {
+                setFaildRegisForExist(true);
+            } else {
+                setFaildRegis(true);
+            }
         }
         setTimeout(() => {
             window.location.reload()
@@ -117,6 +122,7 @@ export default function AddRegister({ date }: datesAddRegis) {
           {span && <h4 className={`text-5xl text-red-600 mb-5`}>La fecha de pago expiro</h4>}
           {successRegis && <span className="text-2xl border-b-2 border-[#007eb8] text-[#007eb8] font-semibold">Registro de Recaudo Exitoso - # {numRecaudo.toString().padStart(5, "0")}</span>}
           {faildRegis && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Registro de Recaudo Fallido</span>}
+          {faildRegisForExist && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Ya existe un registro con el numero de recibo</span>}
           {scanCode && <span className="text-2xl font-mono font-semibold">Por favor escanee el codigo</span>}
         <div className="flex flex-col items-center justify-center">
           <h3><strong>Codigo:</strong> {code}</h3>
