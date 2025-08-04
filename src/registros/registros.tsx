@@ -20,6 +20,7 @@ export default function Home() {
   const [faildRegisForExist, setFaildRegisForExist] = useState(false)
   const [scanCode, setScanCode] = useState(false)
   const [numRecaudo, setNumRecaudo] = useState("")
+  const [loading, setLoading] = useState(false)
  
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (event.key === "Enter") {
@@ -93,13 +94,17 @@ export default function Home() {
   }
 
   async function sendRegister() {
+    setLoading(true)
     cleanDates();
     setButton(false);
     const result = await setDatas({ convenio, valuePay, factura }) as any;
+    console.log(result)
     if (result.success) {
+      setLoading(false)
       setNumRecaudo(result.data);
       setSuccessRegis(true);
     } else {
+      setLoading(false)
       if (result.exist) {
         setFaildRegisForExist(true);
       } else {
@@ -118,6 +123,7 @@ export default function Home() {
           <Barcode />
           <h1 className="text-center pb-5">Escanear codigo</h1>
         </div>
+          {loading&&<p className="text-2xl font-semibold">Enviando...</p>}
           {span && <h4 className={`text-5xl text-red-600 mb-5`}>La fecha de pago expiro</h4>}
           {successRegis && <span className="text-2xl border-b-2 border-[#007eb8] text-[#007eb8] font-semibold">Registro de Recaudo Exitoso - # {numRecaudo.toString().padStart(5, "0")}</span>}
           {faildRegis && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Registro de Recaudo Fallido</span>}
