@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { currentDate } from "./components/date";
 import Barcode from "./components/Barcode";
 import setDatas from "./components/setDatas";
+import { useAuthStore } from "../utils/state";
 
 
 export default function Home() {
@@ -21,6 +22,9 @@ export default function Home() {
   const [scanCode, setScanCode] = useState(false)
   const [numRecaudo, setNumRecaudo] = useState("")
   const [loading, setLoading] = useState(false)
+  const { ensureToken } = useAuthStore()
+  const [loadingToken, setLoadingToken] = useState(false);
+  const [errorAuth, setErrorAuth] = useState<boolean>(false);
  
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (event.key === "Enter") {
@@ -62,6 +66,7 @@ export default function Home() {
       }
     }
   }, [code, count]);
+
   useEffect(() => {
     if (styleCode) {
       window.addEventListener("keydown", handleKeyDown);
@@ -85,12 +90,27 @@ export default function Home() {
     setButton(false)
   }
 
-  function ListenCode() {
-    setScanCode(true)
-    setSuccessRegis(false)
-    setFaildRegis(false)
-    cleanDates()
-    setStyleCode((prevStyleCode) => !prevStyleCode);
+  async function ListenCode() {
+    setSuccessRegis(false);
+    setFaildRegis(false);
+    cleanDates();
+    setLoadingToken(true);
+    try {
+      const token = await ensureToken(); // requesta si no hay token o está por expirar
+      console.log('Token obtenido en ListenCode:', token);
+      setScanCode(true);
+      setStyleCode((prev) => !prev);
+
+      // ya está guardado en el store por ensureToken()/fetchNewToken
+      // aquí puedes continuar con la lógica que depende del token
+    } catch (err: any) {
+      console.error('Error obteniendo token:', err);
+      setErrorAuth(true);
+      // opcional: revertir scanCode o mostrar UI
+    } finally {
+      setLoadingToken(false);
+      setErrorAuth(false);
+    }
   }
 
   async function sendRegister() {
@@ -123,7 +143,9 @@ export default function Home() {
           <Barcode />
           <h1 className="text-center pb-5">Escanear codigo</h1>
         </div>
+          {errorAuth&& <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Error de autenticacion</span>}
           {loading&&<p className="text-2xl font-semibold">Enviando...</p>}
+          {loadingToken&&<p className="text-2xl font-semibold">Comprobando ..</p>}
           {span && <h4 className={`text-5xl text-red-600 mb-5`}>La fecha de pago expiro</h4>}
           {successRegis && <span className="text-2xl border-b-2 border-[#007eb8] text-[#007eb8] font-semibold">Registro de Recaudo Exitoso - # {numRecaudo.toString().padStart(5, "0")}</span>}
           {faildRegis && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Registro de Recaudo Fallido</span>}
