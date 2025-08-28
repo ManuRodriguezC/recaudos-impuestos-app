@@ -44,15 +44,15 @@ export default function AddRegister({ date }: datesAddRegis) {
         return;
         }
         if (event.key !== "Alt" && event.key !== "(" && event.key !== ")") {
-        if ((count ===  34 || count ===  51) && event.key === "0") {
+        if ((count ===  34) && event.key === "0") {
             setCount((prevCount) => prevCount +  1);
             return;
         }
-        if ((count ===  35 || count ===  52) && event.key === "2") {
+        if ((count ===  35) && event.key === "2") {
             setCount((prevCount) => prevCount +  1);
             return;
         }
-        if ((count ===  36 || count ===  53) && event.key === "9") {
+        if ((count ===  36) && event.key === "9") {
             setCount((prevCount) => prevCount +  1);
             return;
         } else {

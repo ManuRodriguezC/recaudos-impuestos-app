@@ -6,20 +6,20 @@ import type { RegistersDates } from "../../api/registersRecaudos";
 import { createRegister, getAllRegister } from "../../api/registersRecaudos";
 
 interface DateParams {
-    convenio: string;
-    valuePay: string;
-    factura: string;
+    convenioNum: string;
+    valueRecaudo: string;
+    facturaNum: string;
     fecha?: string
 }
 
-export default async function setDatas({ convenio, valuePay, factura, fecha }: DateParams): Promise<Object> {
+export default async function setDatas({ convenioNum, valueRecaudo, facturaNum, fecha }: DateParams): Promise<Object> {
 
   const fechaCur = fecha ? fecha : datePy()
 
     const registerDatas: RegistersDates = {
       "encabezadoArchivo": HeaderFile(),
-      "encabezadoLote": HeaderLote(convenio),
-      "registroDetalle": RegisterDetail(factura, valuePay),
+      "encabezadoLote": HeaderLote(convenioNum),
+      "registroDetalle": RegisterDetail(facturaNum, valueRecaudo),
       "fecha": fechaCur
   }
 

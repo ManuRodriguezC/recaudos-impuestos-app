@@ -12,10 +12,11 @@
   "dependencies": {
     "@astrojs/check": "^0.5.2",
     "@astrojs/react": "^3.0.10",
-    "@astrojs/tailwind": "^5.1.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "@astrojs/vercel": "^8.2.5",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "astro": "^4.3.5",
+    "astro": "^5.13.0",
     "axios": "^1.6.7",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
